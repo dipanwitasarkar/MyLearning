@@ -1,0 +1,546 @@
+These are must-know Linux concepts for software engineers, SREs, platform engineers, and system design interviews.
+
+1. grep: Global Regular Expression Print
+Used to search text in files or command output.
+
+Basic Usage: grep "error" app.log
+Find all lines containing "error".
+
+a. Ignore Case
+grep -i "error" app.log
+
+Matches:
+Error
+ERROR
+error
+
+b. Recursive Search
+grep -r "database" .
+Search entire directory tree.
+
+c. Show Line Numbers
+grep -n "Exception" app.log
+
+Output:
+25:NullPointerException
+86:DatabaseException
+
+d. Count Matches
+grep -c "ERROR" app.log
+
+Common Real-world Example->
+Find Tomcat errors:
+grep -i error catalina.out
+
+e. Find OOMs:
+grep -i "outofmemory" catalina.out
+
+2. awk
+Think of awk as: "Excel for text files"
+It processes data column by column.
+
+Suppose file:
+John 5000
+Mary 7000
+Bob 6000
+
+a. Print First Column
+awk '{print $1}' file.txt
+
+Output:
+John
+Mary
+Bob
+
+b. Print Second Column
+awk '{print $2}' file.txt
+
+c. Sum Values
+awk '{sum += $2} END {print sum}' file.txt
+
+Output:
+18000
+
+CSV Example->
+id,name,salary
+1,John,100
+2,Mary,200
+
+awk -F',' '{print $2}' employees.csv
+
+-F in awk means Field Separator.
+By default, awk splits each line on whitespace (spaces or tabs).
+
+Output:
+name
+John
+Mary
+
+Find Processes Using CPU > 20%
+ps aux | awk '$3 > 20'
+
+Here:
+$1 -> user
+$2 -> PID
+$3 -> CPU
+
+3. sed
+sed = Stream Editor
+Used for modifying text.
+
+a. Replace Text
+sed 's/old/new/' file.txt
+Only first occurrence per line.
+
+b. Replace All Occurrences
+sed 's/old/new/g' file.txt
+
+c. Delete Lines
+Delete line 5:
+sed '5d' file.txt
+
+d. Print Specific Lines
+sed -n '10,20p' file.txt
+
+e. Modify File In-place
+sed -i 's/dev/prod/g' config.properties
+
+Real Example:
+Update database URL:
+sed -i 's/mysql/postgres/g' application.properties
+
+4. top
+Shows live system resource usage.
+
+Run: top
+You'll see:
+PID USER CPU MEM COMMAND
+
+Example:
+1234 tomcat 80% 2G java
+
+means:
+PID 1234
+Java process
+Using 80% CPU
+Using 2GB RAM
+Sort By Memory
+
+Inside top:
+M
+Sort By CPU
+
+P
+Kill Process
+
+Press:
+k
+
+and enter PID.
+
+Modern alternative:
+
+htop
+Much easier.
+
+5. ps
+Shows process information.
+
+See Running Processes
+ps
+
+Common Usage
+ps aux
+
+
+Output:
+
+USER PID %CPU %MEM COMMAND
+
+Find Specific Process
+ps aux | grep java
+
+See Process Tree
+ps -ef --forest
+
+
+Example:
+
+systemd
+ └─tomcat
+    └─java
+
+Important Fields
+Field	MeaningPID	Process ID
+PPID	Parent Process
+%CPU	CPU usage
+%MEM	Memory usage
+
+6. netstat
+Shows network connections.
+
+All Listening Ports
+netstat -tulpn
+
+Example:
+tcp 0 0 0.0.0.0:8080 LISTEN 1234/java
+
+
+Meaning:
+Java process
+Listening on 8080
+
+Current Connections
+netstat -an
+
+Modern Replacement
+ss
+
+Example:
+ss -tulpn
+
+7. lsof
+lsof = List Open Files
+
+Remember:
+Everything is a file in Linux.
+Sockets, disks, pipes are all files.
+
+Show Open Files
+lsof
+
+Who Uses Port 8080?
+lsof -i :8080
+
+Output:
+java 1234 user
+
+Open Files By Process
+lsof -p 1234
+
+Which Process Has File Open?
+lsof app.log
+
+Very useful when log files can't be deleted.
+
+8. kill
+Terminates processes.
+
+Graceful Kill
+kill PID
+
+Sends:
+SIGTERM (15)
+
+Process can clean up.
+
+Force Kill
+kill -9 PID
+
+Sends:
+SIGKILL
+
+Kernel immediately terminates.
+
+Examples
+kill 1234
+
+kill -9 1234
+
+Common Signals
+Signal	Number	PurposeSIGTERM	15	Graceful stop
+SIGKILL	9	Force stop
+SIGHUP	1	Reload config
+SIGINT	2	Ctrl+C
+
+9. strace
+One of the most powerful debugging tools.
+Shows all system calls made by a process.
+
+Trace Command
+strace ls
+
+
+You'll see:
+open()
+read()
+write()
+close()
+
+Trace Existing Process
+strace -p 1234
+
+Attach to running process.
+
+Find Missing File
+strace java app.jar
+
+Output:
+
+open("config.properties")
+ENOENT
+
+
+Meaning:
+File not found
+
+Real-world Use
+Application hangs.
+
+Attach:
+strace -p PID
+
+
+Maybe you see:
+connect(...)
+
+stuck forever.
+Now you know it's waiting on network.
+
+10. inode
+One of the most important Linux concepts.
+An inode stores file metadata.
+Not file contents.
+
+Contains:
+
+Owner
+Permissions
+Creation time
+Modification time
+File size
+Disk block locations
+
+View Inode Number
+ls -i
+
+
+Output:
+82930 file.txt
+
+82930 = inode number.
+
+Important
+Filename is NOT stored in inode.
+
+Directory maps:
+
+filename -> inode
+
+Example
+report.txt -> inode 100
+
+
+inode 100 contains metadata.
+
+11. Filesystem
+Filesystem organizes data on storage.
+
+Examples:
+
+ext4
+xfs
+btrfs
+zfs
+ntfs
+fat32
+
+Think:
+
+Storage device = blank land
+Filesystem = city plan
+Files and directories = buildings
+
+Check Filesystem
+df -T
+
+
+Output:
+Filesystem Type
+/dev/sda1 ext4
+
+12. Mount Points
+Linux has a single directory tree.
+Different disks are attached at different points.
+
+Example:
+
+/
+├── home
+├── var
+├── data
+
+
+Maybe:
+
+/dev/sda1 mounted on /
+/dev/sdb1 mounted on /data
+
+Check Mounts
+mount
+
+or
+
+df -h
+
+Mount Disk
+mount /dev/sdb1 /data
+
+Now:
+
+/data
+
+
+actually points to disk sdb1.
+
+Interview Question
+
+Windows:
+
+C:
+D:
+E:
+
+
+Linux:
+
+Single tree:
+
+/
+
+
+with mount points.
+
+13. File Permissions
+
+Every file has:
+
+r = read
+w = write
+x = execute
+
+
+For:
+
+Owner
+Group
+Others
+
+
+Example
+
+ls -l
+
+
+Output:
+
+-rwxr-xr--
+
+
+Breakdown:
+
+Owner : rwx
+Group : r-x
+Others: r--
+
+Numeric Values
+r = 4
+w = 2
+x = 1
+
+
+Examples:
+
+7 = rwx
+6 = rw-
+5 = r-x
+4 = r--
+
+chmod
+chmod 755 script.sh
+
+
+means:
+
+Owner  = rwx = 7
+Group  = r-x = 5
+Others = r-x = 5
+
+chmod 644
+chmod 644 file.txt
+
+
+means:
+
+Owner = rw-
+Group = r--
+Others = r--
+
+How These Concepts Tie Together
+
+Imagine your Tomcat app is down.
+
+Step 1
+
+Find Java process:
+
+ps aux | grep java
+
+Step 2
+
+Check CPU:
+
+top
+
+Step 3
+
+Check port:
+
+netstat -tulpn | grep 8080
+
+
+or
+
+lsof -i :8080
+
+Step 4
+
+Search logs:
+
+grep ERROR catalina.out
+
+Step 5
+
+Extract useful fields:
+
+grep ERROR catalina.out | awk '{print $5}'
+
+Step 6
+
+Replace a bad config:
+
+sed -i 's/dev/prod/g' app.properties
+
+Step 7
+
+Trace a hung process:
+
+strace -p PID
+
+Step 8
+
+Kill and restart:
+
+kill PID
+
+
+For interviews at companies like NetApp, Databricks, Microsoft, Amazon, Google, I'd especially focus on:
+
+grep, awk, sed
+ps, top, kill
+lsof, netstat/ss
+inode
+filesystem vs mount point
+Linux permissions (chmod 755, 644, 777, sticky bit, setuid, setgid)
+
+These are asked surprisingly often because they reveal whether someone actually debugs production systems.
