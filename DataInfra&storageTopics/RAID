@@ -1,0 +1,123 @@
+1. RAID (Redundant Array of Independent Disks)-
+Single disk failure causes data loss. RAID combines multiple disks to improve:
+- Performance
+- Reliability
+- Capacity
+
+Imagine this scenario ->
+
+You have one hard drive -> Disk A
+It stores customer data.One day the disk fails -> Everything is gone.
+
+RAID solves this problem ->
+
+a. RAID 0 (Performance) (Striping)
+- Data split across disks.
+
+Suppose a file is: ABCDEFGHIJ
+Instead of storing all on one disk:
+
+Disk1 : ACEGI
+Disk2 : BDFHJ
+
+Both disks work simultaneously.
+
+Benefit:
+- Data is read twice as fast.
+- Like having two cashiers instead of one.
+
+Problem:
+- If either disk dies:
+
+Disk1 dies
+You only have:
+
+BDFHJ
+
+File is unusable.
+
+b. RAID 1 (Mirroring)
+
+Store the same thing twice.
+
+Disk1 : ABCDE
+Disk2 : ABCDE
+
+Benefit:
+- If Disk1 dies:
+Disk2 still works.
+
+Real Life Example:
+Google Photos stored on two different disks.
+
+One fails.
+
+User doesn't notice.
+
+c. RAID 5 - Uses striping + parity. Very common.
+
+Three disks.
+
+Disk1 : Data
+Disk2 : Data
+Disk3 : Parity (Parity is like a mathematical checksum)
+
+If one disk fails: Missing disk reconstructed using remaining disks.
+
+Example
+
+Think of three friends remembering a phone number.
+
+Even if one forgets, the other two can help recover it.
+
+d. Why RAID 6 Exists: Like RAID 5 but stores two parity blocks.
+- Can survive 2 disk failures.
+- Preferred for large storage systems.
+
+Modern disks are huge.
+
+10TB+
+
+Rebuilding a failed disk can take many hours.
+
+While rebuilding: 2nd disk fails
+- RAID 5 loses data.
+- RAID 6 survives two failures.
+
+This is why enterprise systems prefer RAID 6.
+
+e. RAID 10: RAID 1 + RAID 0
+
+Mirror Pair 1
+Mirror Pair 2
+
+Then striped together.
+
+Excellent performance. 
+Excellent reliability.
+Expensive.
+
+---------------------------------------------------------------
+
+f. NetApp Interview Question
+
+fa. Why not use RAID 1 everywhere?
+
+Answer:
+
+Excellent protection
+But wastes 50% storage
+
+If I buy 100 TB
+
+I only get 50 TB usable.
+
+Very expensive.
+
+fb. Why is RAID 5 less popular with SSDs?
+
+Because parity calculations add overhead and SSD rebuilds create write amplification.
+
+fc. NetApp Angle
+
+NetApp uses RAID-DP (Double Parity) which is similar to RAID 6 and protects against simultaneous disk failures.

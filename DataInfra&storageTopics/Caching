@@ -1,0 +1,28 @@
+Caching : Store frequently accessed data in faster storage.
+Usually RAM or SSD.
+
+Example:
+Without Cache:
+
+Request
+↓
+HDD
+↓
+10 ms
+
+With Cache:
+Request
+↓
+RAM
+↓
+100 ns
+
+Types:
+- Read Cache: Caches frequently read data.
+- Write Cache: Buffers writes before disk commit.
+
+Interview Question:
+Why does cache improve performance?
+Because memory access is thousands of times faster than disk access.
+
+NetApp: NetApp heavily utilizes caching technologies such as Flash Cache and system memory caching.

@@ -1,0 +1,44 @@
+Deduplication - Removing duplicate data.
+
+Example:
+100 Employees Have Same PowerPoint Template
+
+Without dedupe: Template x 100
+100 copies stored.
+
+With dedupe: Store once
+Reference 100 times
+
+Another Example:
+100 Virtual Machines.
+All have: Windows OS Files
+
+Most files identical.
+
+Dedupe stores one copy.
+
+Huge savings.
+
+Easy Analogy:
+Library. -> 100 students ask for same book.
+Do you store: 100 books
+Or
+1 book
+and let everyone borrow?
+
+Dedupe does the second.
+
+Before
+100 GB
+100 GB
+100 GB
+=
+300 GB.
+
+After 100 GB + References
+Near 100 GB.
+
+Benefit:
+Huge storage savings.
+
+NetApp: ONTAP has inline and background deduplication.

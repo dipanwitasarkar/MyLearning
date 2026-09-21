@@ -1,0 +1,58 @@
+Storage Replication: Copying data from one storage system to another.
+
+Purpose:
+Disaster Recovery
+Backup
+Geo-redundancy
+
+Suppose your company has:
+Bangalore Datacenter
+
+Suddenly power outage. Fire. Flood. Everything lost.
+
+Replication prevents disaster.
+Basic Idea: Keep data somewhere else too.
+
+Primary Site
+       ↓
+Secondary Site
+
+Types:
+1. Synchronous Replication: Write happens to both locations.
+Write acknowledged only after both sites write successfully.
+
+App
+ ↓
+Site A
+ ↓
+Site B
+
+
+Only after both succeed: Success returned
+
+Benefit: Zero data loss. RPO = 0
+Drawback: Slower. Need network trip. Higher latency.
+
+Example:
+Bank Transaction->
+Customer transfers: ₹10,000
+Cannot lose the transaction.
+Use synchronous replication.
+
+2. Asynchronous Replication: Write locally, replicate later.
+Every minute
+or
+Every 5 minutes
+
+Benefit: Fast. Lower latency. Small data-loss window.
+Risk: Last few minutes could be lost.
+
+Example:
+Photo backup. - Losing last 30 seconds is acceptable.
+
+Interview Question:
+Difference between RPO and RTO?
+RPO = acceptable data loss
+RTO = acceptable downtime
+
+NetApp: NetApp SnapMirror is a major replication technology.

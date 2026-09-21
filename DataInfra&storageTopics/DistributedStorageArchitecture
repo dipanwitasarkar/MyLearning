@@ -1,0 +1,47 @@
+Distributed Storage Architecture: This is the highest-value topic.
+
+Problem:
+Single storage appliance becomes bottleneck.
+Need petabytes of data.
+Need billions of files.
+Need no single point of failure.
+
+Distributed Storage:
+Many nodes act as one storage system.
+
+Client
+   |
+Cluster
+ ├ Node1
+ ├ Node2
+ ├ Node3
+ └ Node4
+
+Benefits:
+Scale Out
+Add nodes.
+Capacity increases.
+Performance increases.
+Fault Tolerance
+If one node fails:
+
+Node1 ❌
+Node2 ✅
+Node3 ✅
+System keeps running.
+Data Distribution
+Data spread across nodes.
+Replication ensures durability.
+
+Concepts Often Asked:
+Consistent Hashing: Determines where data lives.
+Replication Factor: 3 copies stored on separate nodes.
+Quorum: Majority agreement before commit.
+Rebalancing: Redistributes data when nodes are added/removed.
+
+Real Examples:
+NetApp ONTAP clusters
+Ceph
+HDFS
+Cassandra
+Amazon S3

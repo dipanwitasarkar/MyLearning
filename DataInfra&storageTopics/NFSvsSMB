@@ -1,0 +1,87 @@
+NFS(Network File System.)
+Linux machines sharing folders. Linux/Unix file-sharing protocol. Client mounts remote directory.
+
+Without NFS->
+Machine A: /data/reports
+Machine B cannot access.
+
+With NFS->
+Machine A shares folder.
+Machine B mounts it:
+
+Shell:
+mount -t nfs server:/data /mnt/data
+mount server:/reports /mnt/reports
+
+Now it feels local.
+
+Example:
+100 application servers.
+Need same configuration files.
+Instead of copying to every server: NFS Share
+All servers read from one place.
+
+Why Companies Love NFS?
+Easy.Centralized.No duplicate files.
+
+NetApp:
+Thousands of enterprises use NetApp NFS exports for:
+Home directories
+Engineering data
+AI datasets
+Kubernetes persistent storage
+
+How It Works?
+Server exposes: /exports/project
+Client accesses remotely.
+
+Appears like local filesystem.
+
+Benefits:
+✅ Centralized storage
+✅ Easy scaling
+✅ Widely used in Linux
+
+Interview Question:
+Difference between NFS and SMB?
+NFS is common in Linux environments.
+SMB is common in Windows environments.
+
+NetApp Angle: NFS storage is one of NetApp's core offerings.
+
+SMB (Server Message Block)
+SMB is basically NFS for Windows. Windows file sharing protocol.
+Example:
+You open: \\fileserver\HR
+That's SMB.
+
+Why Used in Corporate Offices?
+Supports:
+Windows login
+Active Directory
+Permissions
+
+Features:
+File sharing
+Printer sharing
+Authentication
+Access control
+Common Usage
+
+Example:
+HR Folder
+HR team -> Full access
+Developers -> No access
+
+Windows handles this easily via SMB.
+
+NFS vs SMB:
+Imagine two countries.
+NFS: Speaks Linux language.
+SMB: Speaks Windows language.
+Both do file sharing.
+Different ecosystems.
+
+Interview Question:
+Why SMB is popular in enterprises?
+Strong integration with Active Directory and Windows security model.

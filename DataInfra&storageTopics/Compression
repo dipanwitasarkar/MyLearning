@@ -1,0 +1,18 @@
+Compression: Reduce storage using compression algorithms.
+
+Example:
+100 GB
+→
+40 GB
+
+Trade-off: Storage saved. But CPU required.
+
+Types:
+- Inline Compression: During writes.
+- Post-process Compression: After data is stored.
+
+Dedupe vs Compression
+Deduplication: Removes duplicate blocks
+Compression: Shrinks block contents
+
+Often used together.

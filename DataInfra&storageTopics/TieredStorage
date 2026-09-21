@@ -1,0 +1,12 @@
+Tiered Storage: Store data on different media based on access frequency.
+
+Hot Data: Frequently accessed. NVMe SSD
+Warm Data: Sometimes accessed. SSD
+Cold Data: Rarely used. HDD/Object Storage
+
+Goal: Reduce storage cost without sacrificing performance.
+
+Example:
+Netflix: Recent content → Fast tier, Older content → Cheaper tier
+
+NetApp: FabricPool automatically tiers cold data to object storage.

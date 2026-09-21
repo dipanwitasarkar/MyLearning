@@ -1,0 +1,26 @@
+Object Storage: Stores data as objects instead of files or blocks.
+
+Object Structure:
+Object
+ ├ Data
+ ├ Metadata
+ └ Unique ID
+
+Examples:
+- Amazon S3
+- Azure Blob
+- NetApp StorageGRID
+
+Benefits:
+- Massive scalability
+- Cheap
+- Great for backups
+- Great for AI data lakes
+
+Not Suitable For:
+- Low-latency databases
+
+Interview Question:
+File vs Object Storage?
+File storage uses directories.
+Object storage uses unique object IDs and rich metadata.

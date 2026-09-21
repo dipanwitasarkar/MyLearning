@@ -1,0 +1,64 @@
+Snapshots: One of NetApp's biggest strengths.
+Point-in-time image of data.
+
+Imagine a Word Document At 10 AM: Version 1
+Create snapshot.
+
+At 2 PM: Delete important content
+Oops.
+
+Restore snapshot.Back to 10 AM state.
+
+How Snapshot Works
+
+Not: Copy all data
+Instead: Remember where data blocks are
+
+Initially almost free.
+
+Example:
+1 TB volume.
+Creating snapshot:
+Time: seconds
+Space: almost zero
+
+
+Traditional backup:
+Time: hours
+Space: 1 TB
+
+Interview Favorite:
+Snapshot vs Backup
+
+Snapshot:
+Fast
+Same storage system
+Short-term recovery
+
+Backup:
+Separate copy
+Disaster protection
+Long-term retention
+
+Filesystem State @ 10:00 AM:
+Traditional Copy
+1TB volume
+→ 1TB storage needed
+
+Expensive.
+
+Snapshot Uses metadata. Stores only changed blocks.
+
+Volume Snapshot Changed blocks only
+
+Extremely space-efficient.
+
+Benefits:
+✅ Fast
+✅ Recovery
+✅ Backup
+✅ Versioning
+
+Interview Question?
+Why are snapshots faster than backups?
+Because snapshots don't copy all data. They mostly preserve metadata references.

@@ -1,0 +1,332 @@
+Block storage is one of the most important storage concepts to understand for NetApp interviews.
+
+The Simple Definition
+
+Block storage stores data as fixed-size blocks and presents those blocks to a server as a raw disk.
+
+The server thinks:
+
+"I have a hard drive attached to me."
+
+even though that disk may actually be on another machine across the network.
+
+Think About a New Hard Drive
+
+Suppose you buy a new SSD.
+
+When you first plug it in:
+
+Disk = Empty blocks
+
+
+The disk does not know about:
+
+Files
+Directories
+Photos
+Documents
+
+It only knows about blocks.
+
+For example:
+
+Block 1
+Block 2
+Block 3
+Block 4
+...
+
+
+The operating system creates a filesystem on top:
+
+mkfs.xfs /dev/sdb
+
+
+Now it becomes:
+
+/documents
+/photos
+/videos
+
+Example
+
+Let's say you're editing a 10 MB file.
+
+The filesystem may split it into blocks:
+
+File.txt
+
+Block 101
+Block 102
+Block 103
+Block 104
+
+
+The storage system only stores those blocks.
+
+It doesn't understand:
+
+File.txt
+
+
+It only sees:
+
+101
+102
+103
+104
+
+
+That's block storage.
+
+Block Storage vs File Storage
+
+This interview question comes up constantly.
+
+Block Storage
+
+Storage provides:
+
+Raw Disk
+
+
+Server manages:
+
+Filesystem
+Partitioning
+Directories
+
+Example:
+
+iSCSI LUN
+/dev/sdb
+
+
+Server creates filesystem.
+
+File Storage
+
+Storage provides:
+
+Shared Folder
+
+
+Storage itself manages:
+
+Files
+Directories
+Permissions
+
+Example:
+
+\\server\files
+
+
+or
+
+/mnt/share
+
+Easy Analogy
+Block Storage = Empty Land
+
+You buy a plot of land.
+
+You decide:
+
+House design
+Rooms
+Kitchen
+Garden
+
+Complete control.
+
+File Storage = Apartment
+
+You get a ready-made apartment.
+
+You simply move in.
+
+Less control.
+
+More convenience.
+
+Where Is Block Storage Used?
+Databases
+
+Examples:
+
+PostgreSQL
+Oracle
+SQL Server
+
+Databases want direct access to disk.
+
+Database
+    ↓
+Block Storage
+
+
+Not file shares.
+
+VMware
+
+Virtual machine disks are usually block storage.
+
+Each VM believes it has:
+
+C:
+
+
+or
+
+/dev/sda
+
+
+Behind the scenes it may be an iSCSI or Fibre Channel LUN.
+
+Kubernetes
+
+Persistent volumes often use:
+
+iSCSI
+Ceph RBD
+AWS EBS
+
+All of which are block storage.
+
+What Is a LUN?
+
+You'll hear this term in NetApp interviews.
+
+LUN stands for:
+
+Logical Unit Number
+
+Think of it as:
+
+Virtual Disk
+
+
+Storage array creates:
+
+LUN 1 = 500 GB
+LUN 2 = 1 TB
+
+
+Server sees:
+
+/dev/sdb
+/dev/sdc
+
+
+These are block devices.
+
+Where Does iSCSI Fit?
+
+iSCSI is not storage.
+
+It is the protocol used to transport block storage.
+
+Example:
+
+NetApp Storage
+      |
+    iSCSI
+      |
+Linux Server
+
+
+Linux sees:
+
+/dev/sdb
+
+
+like a local disk.
+
+So:
+
+Block Storage = the disk
+iSCSI = how the disk travels across the network
+
+Where Does Ceph Fit?
+
+Ceph can provide several interfaces.
+
+Ceph RBD
+
+RBD (RADOS Block Device) is block storage.
+
+Application
+      ↓
+Ceph RBD
+      ↓
+Ceph Cluster
+
+
+Server sees a virtual disk.
+
+Exactly like a SAN.
+
+CephFS
+
+CephFS is file storage.
+
+Application
+      ↓
+CephFS
+      ↓
+Ceph Cluster
+
+
+Users see files and folders.
+
+Why Databases Prefer Block Storage
+
+Imagine PostgreSQL updates one row.
+
+With block storage:
+
+Database
+   ↓
+Disk Block
+
+
+Very direct.
+
+With file storage:
+
+Database
+   ↓
+Filesystem
+   ↓
+Network File System
+   ↓
+Storage
+
+
+More layers.
+
+More overhead.
+
+More latency.
+
+That's why databases and virtualization platforms typically prefer block storage.
+
+NetApp Interview Answer
+
+If asked:
+
+What is block storage?
+
+A strong answer is:
+
+Block storage stores data as fixed-size blocks and exposes those blocks as a virtual disk to a server. The storage system manages blocks, while the operating system creates filesystems and directories on top. Common examples include iSCSI, Fibre Channel SANs, and Ceph RBD. Block storage is commonly used for databases, virtual machines, and other latency-sensitive workloads.
+
+A quick memory trick:
+
+Block Storage → Looks like a disk
+File Storage  → Looks like a folder
+Object Storage → Looks like an object ID/API
+
+
+That's the simplest way to distinguish the three storage models in an interview.

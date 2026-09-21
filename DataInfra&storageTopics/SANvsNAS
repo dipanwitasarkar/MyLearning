@@ -1,0 +1,220 @@
+SAN vs NAS
+
+This is probably the most asked storage question.
+
+Think About Renting a House:
+SAN (Storage Area Network) - Provides storage as a block device.
+The storage system gives you an empty apartment.
+
+You decide:
+
+Bedroom
+Kitchen
+Furniture
+
+Everything.
+
+Server sees raw disk like: /dev/sda or C:
+
+The server formats it->Creates filesystem->Stores data.
+
+Used For:
+- Databases
+- VMware
+- Kubernetes storage
+- Oracle
+
+Because they want direct disk control.
+Appears as local disk.
+
+Protocols:
+-   Fibre Channel
+-   iSCSI
+
+Characteristics:
+-   High performance
+-   Low latency
+-   Database workloads
+
+
+NAS (Network Attached Storage): Provides files. Accessed via: NFS, SMB
+NAS gives you a ready-made house.
+Shared Folder -> You simply use it. -> No formatting. -> No partitioning.
+Just access files.
+
+Users see:
+\\fileserver\docs
+or
+/mnt/shared
+
+Example:
+Office shared drive: \\company\documents
+or
+/mnt/shared
+
+Characteristics:  
+-   Easy sharing
+-   File-based access
+-   Home directories
+-   Team shares
+
+Interview Shortcut If asked:
+SAN provides? Block storage.
+NAS provides? File storage.
+
+Real Example: SQL Server Needs SAN. It wants direct access to blocks.
+Team Documents: Need NAS. People only care about files.
+
+Interview Answer:
+When would you choose SAN over NAS?
+- Use SAN when applications need direct block-level storage and low latency, such as databases or virtualization platforms.
+
+NetApp Angle:
+NetApp supports both SAN and NAS workloads through ONTAP.
+
+SAN vs NAS is a broader architectural concept, while Block Storage vs File Storage is the type of storage being provided.
+
+Full Forms:
+SAN = Storage Area Network
+NAS = Network Attached Storage
+NFS = Network File System
+SMB = Server Message Block
+iSCSI = Internet Small Computer Systems Interface
+
+Relationship:
+
+Think of it like this:
+
+SAN  ---> Provides Block Storage
+NAS  ---> Provides File Storage
+
+Most of the time:
+SAN = Block Storage
+NAS = File Storage
+
+so people often use them interchangeably in interviews.
+
+SAN (Storage Area Network): A SAN is a network dedicated to providing disks (block devices) to servers.
+
+Example:
+
+NetApp Storage
+      |
+    iSCSI
+      |
+Application Server
+
+
+The server sees: /dev/sdb
+Then the server formats it: mkfs.xfs /dev/sdb
+and mounts it: /data
+
+The storage system gives a raw disk.
+
+The server is responsible for:
+Partitioning
+Filesystem creation
+Directories
+Files
+
+Common SAN Protocols:
+iSCSI
+Fibre Channel (FC)
+FCoE (Fibre Channel over Ethernet)
+NAS (Network Attached Storage)
+
+A NAS directly exposes files and folders.
+
+Example: /mnt/shared
+or
+\\fileserver\documents
+
+The storage system itself manages:
+Files
+Directories
+Permissions
+
+Clients simply access files.
+
+Common NAS Protocols:
+NFS (Linux/Unix)
+SMB (Windows)
+
+Visual Comparison:
+SAN:
+
+Application
+      ↓
+Filesystem (XFS/ext4)
+      ↓
+Block Device (/dev/sdb)
+      ↓
+iSCSI / Fibre Channel
+      ↓
+Storage Array
+
+NAS:
+
+Application
+      ↓
+NFS / SMB
+      ↓
+Storage Array
+
+
+Notice:
+In SAN, the server creates the filesystem.
+In NAS, the storage already provides the filesystem.
+Real NetApp Example:
+For Oracle Database-Use SAN.
+Reason:
+
+Oracle
+   ↓
+Block Storage
+
+Oracle wants direct access to disk blocks.
+
+For Shared Team Documents Use NAS.
+
+Reason:
+
+Users
+   ↓
+Shared Files
+
+Nobody wants to manage disks.
+People just want folders.
+
+Interview Question:
+Can NAS use block storage internally?
+
+Yes.
+
+A NetApp appliance may internally store data on disks arranged in RAID groups and blocks.
+
+But what it exposes to clients is:
+
+NFS
+or
+SMB
+
+
+so from the client's perspective it is file storage.
+
+One-Liner to Remember
+Term	        Think Of It As
+SAN	            Network that provides disks
+NAS	            Network that provides files
+Block Storage	Looks like /dev/sdb
+File Storage	Looks like /mnt/share
+iSCSI	        Protocol used by SAN
+NFS	            Protocol used by NAS
+SMB	            Windows file sharing protocol
+
+Easy Memory Trick:
+
+SAN = "I get a disk." /dev/sdb
+NAS = "I get a folder." /finance/reports
+
+That's usually enough to answer 80% of SAN/NAS questions in a NetApp interview.

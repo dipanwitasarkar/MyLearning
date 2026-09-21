@@ -1,0 +1,176 @@
+iSCSI, Ceph, and RAID solve completely different problems, although they are often used together.
+Think of a storage stack like this:
+
+Application
+    ↓
+Filesystem (XFS, ext4, NTFS)
+    ↓
+Block Storage (iSCSI, FC, Ceph RBD)
+    ↓
+Data Protection (RAID, Erasure Coding, Replication)
+    ↓
+Disks (SSD/HDD)
+
+1. Is iSCSI a RAID?
+
+No. iSCSI (Internet Small Computer Systems Interface) is a storage access protocol.
+It lets a server access a remote disk over the network as if it were a local disk.
+Example:
+
+Storage Array
+     |
+   iSCSI
+     |
+Application Server
+
+The server sees: /dev/sdb
+and can format it with: mkfs.xfs /dev/sdb
+
+Analogy:
+Imagine RAID is how books are stored in a library.
+iSCSI is the road that lets you reach the library.
+The road isn't responsible for protecting books.
+RAID is.
+
+Interview Answer: iSCSI is a block storage protocol that transports SCSI commands over TCP/IP networks. It provides access to storage but does not provide data redundancy like RAID.
+
+2. Is Ceph a RAID? Also no.
+
+Ceph is a distributed storage system.
+Instead of protecting data with RAID inside one machine, Ceph protects data across many machines.
+
+Traditional RAID
+Server
+ ├ SSD1
+ ├ SSD2
+ ├ SSD3
+ └ SSD4
+
+Protection exists within a single server.
+
+Ceph
+Node1
+Node2
+Node3
+Node4
+Node5
+
+Data is distributed across multiple servers.
+
+Example:
+
+Object A
+    ├ Copy1 -> Node1
+    ├ Copy2 -> Node3
+    └ Copy3 -> Node5
+
+
+If Node3 fails, data remains available.
+Why Modern Systems Prefer This
+
+Suppose: 10 PB storage
+
+A RAID controller cannot manage that efficiently.
+
+Distributed systems like:
+
+Ceph
+NetApp ONTAP clusters
+StorageGRID
+HDFS
+
+scale much better.
+
+3. Does Ceph Use RAID Internally?
+
+It can, but doesn't have to.
+
+A Ceph node might be:
+
+Server
+  ├ RAID 1 SSDs
+  └ Ceph OSD
+
+
+or
+
+Server
+  ├ Individual SSDs
+  └ Ceph OSD
+
+
+Many Ceph deployments actually avoid hardware RAID because Ceph already provides redundancy at the cluster level.
+
+A common interview answer:
+
+Using RAID underneath Ceph can sometimes duplicate protection mechanisms and increase rebuild complexity.
+
+4. Ceph Replication vs RAID
+RAID 6
+Disk1
+Disk2
+Disk3
+Disk4
+
+
+Can survive disk failures inside a server.
+
+Ceph Replication
+Server1
+Server2
+Server3
+Server4
+
+
+Can survive:
+
+Disk failure
+Server failure
+Rack failure
+Sometimes datacenter failure
+
+Much stronger fault tolerance.
+
+5. What About CephFS?
+
+CephFS is also not RAID.
+
+CephFS is a filesystem built on top of Ceph.
+
+Example:
+
+Application
+      ↓
+CephFS
+      ↓
+Ceph Cluster
+      ↓
+Multiple Servers
+
+
+Like:
+
+NFS
+SMB
+ext4
+
+It provides a filesystem interface.
+
+Quick Interview Cheat Sheet
+Technology	    What It Is	                                    Example
+RAID	        Disk protection inside a storage system	        RAID 5, RAID 6
+iSCSI	        Protocol to access block storage over network	SAN storage
+NFS	            File sharing protocol	                        /mnt/share
+SMB	            Windows file sharing protocol	                \\server\files
+Ceph	        Distributed storage platform	                Clustered storage
+CephFS	        Filesystem on top of Ceph	                    Shared POSIX filesystem
+SAN	            Block storage architecture	                    iSCSI, Fibre Channel
+NAS	            File storage architecture	                    NFS, SMB
+
+NetApp-style interview question:
+Q: If I have 10 servers with disks and want petabyte-scale storage with no single point of failure, would you choose RAID or Ceph?
+
+Strong answer:
+RAID protects disks within a single storage node, but it does not eliminate the node itself as a failure point. For petabyte-scale distributed storage, I would use a system like Ceph that replicates or erasure-codes data across multiple nodes. RAID may still be used inside individual nodes for local protection, but the primary resiliency comes from the distributed storage layer.
+
+This distinction between RAID (disk-level protection), iSCSI (storage access protocol), and Ceph (distributed storage architecture) is something interviewers commonly expect senior engineers to understand.
