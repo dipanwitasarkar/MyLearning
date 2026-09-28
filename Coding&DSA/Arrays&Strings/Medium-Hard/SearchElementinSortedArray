@@ -1,0 +1,187 @@
+This is a binary search variation and is asked very frequently.
+
+Example:
+
+Plain Text
+nums = [4,5,6,7,0,1,2]
+target = 0
+Show more lines
+
+Output:
+
+Plain Text
+4
+Show more lines
+
+The trick is:
+
+At least one half of the array is always sorted.
+
+Observation
+
+For any middle element:
+
+Plain Text
+[4,5,6,7,0,1,2]
+^
+mid=7
+Show more lines
+
+Check:
+
+Go
+nums[left] <= nums[mid]
+Show more lines
+
+If true:
+
+Plain Text
+left half is sorted
+Show more lines
+
+Otherwise:
+
+Plain Text
+right half is sorted
+``
+Show more lines
+
+This is the key insight.
+
+Example
+Plain Text
+nums = [4,5,6,7,0,1,2]
+target = 0
+ 
+l=0
+r=6
+ 
+mid=3 => 7
+Show more lines
+
+Array:
+
+Plain Text
+4 5 6 7 0 1 2
+^
+Show more lines
+
+Left side:
+
+Plain Text
+4 5 6 7
+Show more lines
+
+is sorted because
+
+Go
+nums[l] <= nums[mid]
+4 <= 7
+Show more lines
+
+Now check whether target lies inside this sorted region:
+
+Go
+target >= nums[l] && target < nums[mid]
+Show more lines
+Plain Text
+0 >= 4 ? false
+``
+Show more lines
+
+Target is not there.
+
+Discard left half.
+
+Plain Text
+search right
+Show more lines
+Next Iteration
+Plain Text
+l=4
+r=6
+ 
+0 1 2
+^
+Show more lines
+
+mid = 5
+
+Plain Text
+nums[mid] = 1
+Show more lines
+
+Now:
+
+Go
+nums[l] <= nums[mid]
+0 <= 1
+Show more lines
+
+Left half sorted.
+
+Target:
+
+Go
+0 >= 0 && 0 < 1
+Show more lines
+
+True.
+
+Move:
+
+Go
+r = mid - 1
+Show more lines
+Next
+Plain Text
+l=4
+r=4
+Show more lines
+
+Found:
+
+Plain Text
+nums[4] = 0
+Show more lines
+
+Return:
+
+Plain Text
+4
+Show more lines
+Pattern
+
+Inside the binary search:
+
+Case 1: Left half sorted
+Go
+nums[l] <= nums[mid]
+Show more lines
+
+Then:
+
+Go
+if target >= nums[l] &&
+target < nums[mid]
+Show more lines
+
+search left
+
+otherwise search right.
+
+Case 2: Right half sorted
+Go
+nums[l] > nums[mid]
+Show more lines
+
+Then:
+
+Go
+if target > nums[mid] &&
+target <= nums[r]
+Show more lines
+
+search right
+
+otherwise search left.

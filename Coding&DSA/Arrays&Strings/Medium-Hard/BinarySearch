@@ -1,0 +1,143 @@
+Binary Search is one of the most important interview patterns.
+
+For most interview problems, both will work:
+
+mid := (left + right) / 2
+
+
+and
+
+mid := left + (right-left)/2
+
+
+give the same answer.
+
+Example:
+
+left = 10
+right = 20
+
+(10 + 20)/2 = 15
+
+10 + (20-10)/2
+= 10 + 5
+= 15
+
+
+So why do interviewers prefer the second form?
+
+Integer Overflow Problem
+
+Imagine a language with 32-bit integers.
+
+Maximum int:
+
+2,147,483,647
+
+
+Now suppose:
+
+left  = 2,000,000,000
+right = 2,100,000,000
+
+
+If you do:
+
+mid := (left + right)/2
+
+
+First:
+
+left + right
+=
+4,100,000,000
+
+
+which exceeds the maximum integer value.
+
+Overflow happens before the division.
+
+So mid becomes garbage.
+
+Safe Formula
+
+Instead:
+
+mid := left + (right-left)/2
+
+
+Compute:
+
+right-left
+=
+100,000,000
+
+
+Still small.
+
+Then:
+
+100,000,000 / 2
+=
+50,000,000
+
+
+Then:
+
+2,000,000,000 + 50,000,000
+=
+2,050,000,000
+
+
+No overflow.
+
+Why does it matter in Go?
+
+For LeetCode constraints:
+
+len(nums) <= 10^5
+
+
+or even
+
+10^6
+
+
+you'll never overflow.
+
+So both are effectively fine:
+
+mid := (left + right)/2
+
+
+works.
+
+But interviewers expect:
+
+mid := left + (right-left)/2
+
+
+because it is the industry-standard overflow-safe version.
+
+Easy Way to Remember
+
+Think:
+
+start + half the distance
+
+
+instead of
+
+average of start and end
+
+
+So:
+
+mid := left + (right-left)/2
+
+
+means:
+
+Start at left, then move halfway toward right.
+
+That's why almost every textbook, interview solution, and production binary search implementation uses this form.

@@ -1,0 +1,449 @@
+All these terms belong to a larger domain:
+
+Parent Domain
+Cloud-Native Telco Infrastructure / Telecom Network Automation
+
+More specifically:
+
+Telecom Networks
+│
+├── 5G / Mobile Networks
+│   ├── RAN
+│   ├── O-RAN
+│   └── Network Functions
+│
+├── Cloud Native Infrastructure
+│   ├── Kubernetes
+│   ├── Containers
+│   ├── CRDs
+│   ├── Operators
+│   └── GitOps
+│
+├── Configuration Management
+│   ├── KPT
+│   ├── Porch
+│   └── Package Management
+│
+└── Automation & Orchestration
+    ├── NCOM
+    ├── GitOps
+    ├── CI/CD
+    └── Day-2 Operations
+
+How all these fit together
+
+Imagine you're working at Nokia, Ericsson, Samsung Networks, Rakuten, AT&T, Verizon, Airtel, Jio, etc.
+
+You want to deploy thousands of 5G base stations.
+
+You cannot manually configure them.
+
+So you need:
+
+Kubernetes
+      ↓
+CRDs
+      ↓
+Operators
+      ↓
+GitOps
+      ↓
+KPT / Porch
+      ↓
+Automated management of RAN/O-RAN
+      ↓
+NCOM
+
+1. Kubernetes (K8s)
+
+Foundation layer.
+
+Kubernetes manages:
+
+Pods
+Containers
+Services
+ConfigMaps
+Deployments
+
+Think:
+
+AWS EC2 -> manages VMs
+
+Kubernetes -> manages containers
+
+
+Must learn:
+
+Pods
+Deployments
+StatefulSets
+Services
+ConfigMaps
+Secrets
+Ingress
+Helm
+2. CRD (Custom Resource Definition)
+
+Kubernetes knows only built-in objects:
+
+Pod
+Deployment
+Service
+
+
+But telecom needs objects like:
+
+CellSite
+RadioUnit
+DU
+CU
+5GCore
+
+
+So we create our own resources.
+
+Example:
+
+apiVersion: telecom.com/v1
+kind: CellSite
+metadata:
+  name: bangalore-site-1
+
+
+This is a CRD.
+
+Think:
+
+CRD = create your own Kubernetes objects
+
+3. Operator
+
+Once CRD exists, who manages it?
+
+Operator.
+
+Example:
+
+kind: CellSite
+spec:
+  sectorCount: 3
+
+
+Operator watches:
+
+CellSite created
+      ↓
+Deploy DU Pods
+      ↓
+Deploy CU Pods
+      ↓
+Configure Network
+
+
+Operator = automation controller.
+
+Formula:
+
+CRD + Controller = Operator
+
+
+Examples:
+
+Prometheus Operator
+Elastic Operator
+Nokia Operators
+OpenShift Operators
+4. GitOps
+
+Most important modern concept.
+
+Traditional:
+
+Engineer
+   ↓
+kubectl apply
+   ↓
+Cluster
+
+
+GitOps:
+
+Git Repo
+   ↓
+ArgoCD / Flux
+   ↓
+Cluster
+
+
+Git becomes source of truth.
+
+Benefits:
+
+Auditability
+Rollback
+Compliance
+Automation
+
+Tools:
+
+ArgoCD
+Flux
+
+Must know:
+
+Pull model
+Reconciliation
+Desired State
+5. KPT
+
+Google's configuration management tool.
+
+Think:
+
+Helm = Template Engine
+
+KPT = Configuration Packaging System
+
+
+Used heavily in telecom.
+
+Example:
+
+5G Cell Site Package
+      ↓
+Customize
+      ↓
+Deploy
+
+
+Capabilities:
+
+Package configs
+Version configs
+Customize configs
+
+Similar to:
+
+apt-get for Kubernetes configs
+
+6. Porch
+
+Built on top of KPT.
+
+Think:
+
+Git manages code
+
+Porch manages KPT packages
+
+
+Used in:
+
+Network automation
+Site management
+O-RAN deployments
+
+Workflow:
+
+Package Repository
+       ↓
+Porch
+       ↓
+Customize
+       ↓
+Approve
+       ↓
+Deploy
+
+7. RAN (Radio Access Network)
+
+Telecom concept.
+
+Components:
+
+Phone
+   ↓
+Tower
+   ↓
+Carrier Network
+
+
+The tower portion is RAN.
+
+Components:
+
+UE (Phone)
+   ↓
+RU (Radio Unit)
+   ↓
+DU (Distributed Unit)
+   ↓
+CU (Centralized Unit)
+
+
+RAN handles:
+
+Radio transmission
+Scheduling
+Mobility
+Handover
+8. O-RAN (Open RAN)
+
+Traditional model:
+
+Ericsson equipment
+      ↓
+Ericsson software
+      ↓
+Ericsson management
+
+
+Vendor lock-in.
+
+O-RAN says:
+
+RU -> Vendor A
+DU -> Vendor B
+CU -> Vendor C
+
+
+Everything communicates through open interfaces.
+
+Benefits:
+
+Open standards
+Lower cost
+Multi-vendor ecosystem
+
+Important concepts:
+
+RU
+
+Radio Unit
+
+DU
+
+Distributed Unit
+
+CU
+
+Central Unit
+
+Near-RT RIC
+
+Real-time controller
+
+Non-RT RIC
+
+AI/ML optimization
+
+A1 Interface
+
+Policy interface
+
+E2 Interface
+
+Control interface
+
+O1 Interface
+
+Management interface
+
+9. NCOM
+
+NCOM usually refers to a Network Configuration & Operations Management platform (many telecom vendors use similar names, including Nokia products).
+
+Purpose:
+
+Manage thousands of network elements
+
+
+Provides:
+
+Inventory management
+Configuration management
+Fault management
+Monitoring
+Lifecycle management
+
+Think:
+
+Kubernetes = manages containers
+
+NCOM = manages telecom network infrastructure
+
+If I were preparing for a Nokia/NetApp/Telco Cloud role
+
+I would learn in this exact order:
+
+Phase 1: Kubernetes Foundations
+Containers
+Docker
+Kubernetes
+Networking
+Storage
+Helm
+Phase 2: Kubernetes Extension
+CRD
+Controllers
+Operators
+Kubebuilder
+Phase 3: GitOps
+ArgoCD
+Flux
+CI/CD
+Reconciliation
+Phase 4: Telecom
+4G basics
+5G basics
+RAN
+O-RAN
+RU/DU/CU
+RIC
+Phase 5: Automation
+KPT
+Porch
+Package Orchestration
+Day-2 Operations
+Phase 6: Advanced
+Service Mesh (Istio)
+CNF (Cloud Native Network Functions)
+ONAP
+Nephio
+Network Slicing
+Edge Computing
+Complete Learning Map
+Linux
+ └── Docker
+       └── Kubernetes
+              ├── Pods
+              ├── Services
+              ├── Ingress
+              ├── Helm
+              │
+              ├── CRDs
+              ├── Controllers
+              ├── Operators
+              │
+              ├── GitOps
+              │      ├── ArgoCD
+              │      └── Flux
+              │
+              ├── KPT
+              └── Porch
+                        │
+                        ▼
+                    Nephio
+                        │
+                        ▼
+                     O-RAN
+                        │
+              ├── RU
+              ├── DU
+              ├── CU
+              ├── RIC
+              └── NCOM
+
+
+If your product is Nokia NCOM-based, I'd strongly recommend focusing next on Nephio → KPT → Porch → GitOps → O-RAN → CNFs, because that's the modern cloud-native telecom stack and the concepts are tightly connected.
