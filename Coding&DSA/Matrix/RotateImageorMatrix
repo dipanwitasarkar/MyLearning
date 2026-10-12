@@ -1,0 +1,7 @@
+Remember:
+
+90° clockwise = transpose + reverse each row
+90° anti-clockwise = transpose + reverse each column
+180° = reverse rows + reverse columns (or rotate 90° twice)
+
+All of them are O(n²) time and O(1) extra space.
